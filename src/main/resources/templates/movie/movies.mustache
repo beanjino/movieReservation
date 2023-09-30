@@ -1,0 +1,25 @@
+{{>layouts/header}}
+<div class="card-group">
+{{#movies}}
+    <div class="mx-3"></div>
+    <div class="card" style="width: 18rem;">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{name}}</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{runningtime}}</li>
+            <li class="list-group-item">{{director}}</li>
+            <li class="list-group-item">{{actors}}</li>
+            <li class="list-group-item">{{age}}</li>
+            <li class="list-group-item">{{rating}}</li>
+        </ul>
+        <div class="card-body">
+            <a href="/movie/{{id}}/reservation" class="card-link">예매하기</a>
+            <a href="/movie/{{id}}/detail" class="card-link">상세</a>
+        </div>
+    </div>
+{{/movies}}<
+</div>
+{{>layouts/footer}}

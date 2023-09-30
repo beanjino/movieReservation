@@ -1,0 +1,90 @@
+{{>layouts/adminheader}}
+<div>
+    <table>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>runningtime</th>
+            <th>price</th>
+            <th>genre</th>
+            <th>director</th>
+            <th>actors</th>
+            <th>rating</th>
+            <th>age</th>
+        </tr>
+        {{#pagingList}}
+            <tr>
+                <td>
+                    <a href="/adminUpdateMovie?id={{id}}">{{id}}</a>
+                </td>
+                <td>{{name}}</td>
+                <td>{{runningtime}}</td>
+                <td>{{price}}</td>
+                <td>{{genre}}</td>
+                <td>{{director}}</td>
+                <td>{{actors}}</td>
+                <td>{{rating}}</td>
+                <td>{{age}}</td>
+            </tr>
+        {{/pagingList}}
+    </table>
+</div>
+
+<div id="pageNumber"></div>
+
+<form action="/adminSearchMovie" method="post">
+    <select id="selectSearch" onchange="changeInputName()">
+        <option>이름</option>
+    </select>
+    <input id="inputSearch" type="text" name="name">
+    <button type="submit">검색</button>
+</form>
+<script>
+    function changeInputName() {
+        var selectElement = document.getElementById("selectSearch");
+        var inputElement = document.getElementById("inputSearch");
+        var selectedOption = selectElement.options[selectElement.selectedIndex].value;
+        if (selectedOption === "이름") {
+            inputElement.name = "name";
+        }
+    }
+    var pageNumber = document.getElementById("pageNumber");
+    var pagingPage = {{paging.page}};
+    console.log("pagingPage = ",pagingPage);
+    if(pagingPage <= 1){
+        var previous1 = document.createElement("span");
+        previous1.textContent = "[이전]";
+        pageNumber.appendChild(previous1);
+    }
+    else{
+        var previous2 = document.createElement("a");
+        previous2.textContent = "[이전]";
+        previous2.href = `/adminManageMovie?page=${pagingPage-1}`;
+        pageNumber.appendChild(previous2);
+    }
+    for(var i = {{paging.startPage}}; i<={{paging.endPage}}; i++){
+        if(i == pagingPage){
+            var pn1 = document.createElement("span");
+            pn1.textContent = i;
+            pageNumber.appendChild(pn1);
+        }
+        else{
+            var pn2 = document.createElement("a");
+            pn2.href = `/adminManageMovie?page=${i}`;
+            pn2.textContent = i;
+            pageNumber.appendChild(pn2);
+        }
+    }
+    if(pagingPage == {{paging.maxPage}}){
+        var next1 = document.createElement("span");
+        next1.textContent = "[다음]";
+        pageNumber.appendChild(next1);
+    }
+    else{
+        var next2 = document.createElement("a");
+        next2.textContent = "[다음]";
+        next2.href = `/adminManageMovie?page=${pagingPage+1}`;
+        pageNumber.appendChild(next2);
+    }
+</script>
+{{>layouts/adminfooter}}

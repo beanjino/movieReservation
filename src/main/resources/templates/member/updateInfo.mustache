@@ -1,0 +1,9 @@
+{{>layouts/header}}
+<form action="/updateInfo" method="post">
+    <input type="hidden" name="id" value={{loginuser.id}} readonly>
+    <input type="text" name="email" value={{loginuser.email}} readonly>
+    <input type="text" name="password" placeholder="비밀번호">
+    <input type="hidden" name="name" value={{loginuser.name}} readonly>
+    <button type="submit" class="btn btn-primary">변경</button>
+</form>
+{{>layouts/footer}}

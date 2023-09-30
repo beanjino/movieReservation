@@ -1,0 +1,9 @@
+{{>layouts/adminheader}}
+<form style="margin-top:40px; margin-left:40px;" action="/adminCreateMember" method="post">
+    <input type="text" name="email" placeholder="이메일">
+    <input type="text" name="password" placeholder="비밀번호">
+    <input type="text" name="name" placeholder="이름">
+    <button type="submit">회원추가</button>
+</form>
+
+{{>layouts/adminfooter}}

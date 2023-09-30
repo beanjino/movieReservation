@@ -1,0 +1,38 @@
+{{>layouts/header}}
+<h1>영화 예매</h1>
+<form class="container" action="/reservedetail" method="post">
+    <label for="theater">영화관</label>
+    <select class="form-select" id="theater" name="city">
+        {{#theaters}}
+            <option value="{{city}}">{{city}}</option>
+        {{/theaters}}
+    </select>
+
+    <label for="movie">영화</label>
+    <select class="form-select" id="movie" name="movie">
+    {{#movies}}
+            <option value="{{name}}">{{name}}</option>
+    {{/movies}}
+    </select>
+    <label for="date">날짜</label>
+    <input type="date" id="date" name="date">
+    <button type="submit">예매</button>
+</form>
+
+
+<script>
+    function bookTicket() {
+      const selectedTheater = document.getElementById("theater").value;
+      const selectedDate = document.getElementById("date").value;
+
+      if (selectedTheater && selectedDate) {
+        // Here, you would typically make an API call to the server to book the ticket
+        // and handle the response accordingly.
+
+        alert(`Ticket booked for ${selectedTheater} on ${selectedDate}`);
+      } else {
+        alert("날짜와 영화, 영화관을 모두 선택해주세요");
+      }
+    }
+  </script>
+{{>layouts/footer}}

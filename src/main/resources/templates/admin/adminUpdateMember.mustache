@@ -1,0 +1,12 @@
+{{>layouts/adminheader}}
+{{#member}}
+    <form style="margin-top:40px; margin-left:40px;" action="/adminUpdateMember" method="post">
+        <input type="hidden" name="id" value={{id}}>
+        <input type="hidden" name="isAdmin" value={{isAdmin}}>
+        <input type="text" readonly name="email" placeholder={{email}} value={{email}}>
+        <input type="text" name="password" placeholder="비밀번호">
+        <input type="text" name="name" value={{name}}>
+        <button type="submit">회원변경</button>
+    </form>
+{{/member}}
+{{>layouts/adminfooter}}

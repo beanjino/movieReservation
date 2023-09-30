@@ -1,0 +1,105 @@
+{{>layouts/header}}
+<style>
+    /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+
+        /* 모달 내용 스타일 */
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        /* 닫기 버튼 스타일 */
+        .close {
+            float: right;
+            cursor: pointer;
+        }
+</style>
+{{#movieTheater}}
+    <script>
+        var movieTheater = {{id}};
+        var i =1;
+    </script>
+    <div class="mx-3"></div>
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{number}} (총{{entireSeat}}석)</h5>
+        </div>
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>로그인이 필요한 서비스입니다.</h2>
+                <button onclick="redirectToLoginPage()">로그인</button>
+                <button onclick="closeModal()">취소</button>
+            </div>
+        </div>
+        {{#startTime}}
+            <form id="reserveForm" action="/reserveseat" method="post">
+                <input type="hidden" name="number" value="{{number}}">
+                <input type="hidden" name="city" value="{{theater.city}}">
+                <input type="hidden" name="movie" value="{{screeningMovie}}">
+                <input type="hidden" name="date" value="{{date}}">
+                <input type="hidden" name="time" value="{{time}}">
+                <input type="hidden" name="entireSeat" value="{{entireSeat}}">
+                <input type="hidden" name="startTimeId" value="{{id}}">
+                {{#loginuser}}
+                    <li class="list-group-item" id="time">{{time}} <button type="submit">{{leftSeat}}석</button></li>
+                {{/loginuser}}
+            </form>
+            {{^loginuser}}
+                <li class="list-group-item" id="time">{{time}} <button onclick="showModalAndSaveFormData()">{{leftSeat}}석</button></li>
+            {{/loginuser}}
+        <script>
+        {
+            console.log('movieTheater = ',movieTheater);
+            console.log('movieTheater2 = ',{{movieTheater.id}});
+            const time = document.getElementById('time');
+            time.id = i++;
+            if(movieTheater == {{movieTheater.id}}){
+                time.style.display="block";
+                console.log("same");
+            }
+            else{
+                time.style.display="none";
+                console.log("different");
+            }
+        }
+        </script>
+            {{/startTime}}
+    </div>
+    <br>
+{{/movieTheater}}
+<script>
+
+    // 모달을 열고 폼 데이터를 저장하는 함수
+    function showModalAndSaveFormData() {
+        var modal = document.getElementById("loginModal");
+        modal.style.display = "block";
+    }
+
+    // 모달을 닫는 함수
+    function closeModal() {
+        var modal = document.getElementById("loginModal");
+        modal.style.display = "none";
+    }
+
+    // 로그인 페이지로 이동하는 함수 (실제 로그인 페이지 URL로 대체해야 함)
+    function redirectToLoginPage() {
+        closeModal(); // 모달 닫기
+        window.location.href = "/login";
+    }
+</script>
+
+{{>layouts/footer}}

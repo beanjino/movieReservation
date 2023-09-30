@@ -1,0 +1,10 @@
+{{>layouts/adminheader}}
+{{#theater}}
+    <form style="margin-top:40px; margin-left:40px;" action="/adminUpdateTheater" method="post">
+        <input type="hidden" name="id" value={{id}}>
+        <input type="text" name="city" value={{city}}>
+        <input type="text" name="region" value={{region}}>
+        <button type="submit">극장변경</button>
+    </form>
+{{/theater}}
+{{>layouts/adminfooter}}

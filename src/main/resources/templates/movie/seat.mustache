@@ -1,0 +1,191 @@
+{{>layouts/header}}
+<style>
+    .seat {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    background-color: grey;
+    display: inline-block;
+    cursor: pointer;
+    }
+    .selected {
+    background-color: black;
+    cursor: not-allowed;
+    }
+    .reserved {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    background-color: black;
+    display: inline-block;
+    pointer-events: none;
+    }
+</style>
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">{{movie.name}}  {{movie.age}}</h5>
+    </div>
+    <li class="list-group-item">{{city}}</li>
+    <li class="list-group-item">{{date}}  {{time}}</li>
+    <li class="list-group-item">{{number}}</li>
+</div>
+<h1>Seat Reservation System</h1>
+<p>Select a seat:</p>
+{{#reservedSeat}}
+    <input type="hidden" name="reservedSeat" value="{{seatNumber}}">
+    <input type="hidden" name="screenStartTimeId" value="{{startTime.id}}">
+{{/reservedSeat}}
+<form action="/reserve" method="post">
+    <input type="hidden" id="moviename" name="moviename" value="{{movie.name}}">
+    <input type="hidden" id="date" name="date" value="{{date}}">
+    <input type="hidden" id="time" name="time" value="{{time}}">
+    <input type="hidden" id="number" name="number" value="{{number}}">
+    <input type="hidden" id="city" name="city" value="{{city}}">
+    <input type="hidden" id="memberid" name="memberid" value="{{loginuser.id}}">
+    <input type="hidden" id="startTimeId" name="startTimeId" value="{{startTimeId}}">
+    <div id="seats"></div>
+    <p>Selected seat: <span id="selected-seat"></span></p>
+    <button type="button" id="submit-btn">예매하기</button>
+</form>
+<script>
+        const numSeats = {{entireSeat}};
+        const seats = new Array(numSeats).fill(false);
+        const reserved = [];
+        var arrSeat = document.getElementsByName("reservedSeat");
+        var screenStartTimeId = document.getElementsByName("screenStartTimeId");
+        for(var i=0; i < arrSeat.length; i++){
+            reserved.push({seatNumber : arrSeat[i].value});
+            reserved[i].startTimeId=screenStartTimeId[i].value;
+            console.log("스크린 스타트 = ",reserved[i].startTimeId);
+        }
+        // Function to toggle seat selection
+        function toggleSeat(index) {
+            if (seats[index]) {
+                seats[index] = false;
+                select=document.getElementById(`seat${index}`);
+                select.classList.remove("selected");
+                select.removeAttribute("name");
+            } else {
+                seats[index] = true;
+                select=document.getElementById(`seat${index}`);
+                select.classList.add("selected");
+                select.setAttribute("name", "selectedSeat");
+            }
+            updateSelectedSeat();
+        }
+        // Function to update the selected seat display
+        function updateSelectedSeat() {
+            const selectedSeatElem = document.getElementById("selected-seat");
+            const selectedSeats = seats.map((selected, index) => selected ? document.getElementById(`seat${index}`).textContent : null).filter(Boolean);
+            if (selectedSeats.length > 0) {
+                selectedSeatElem.textContent = selectedSeats.join(", ");
+            } else {
+                selectedSeatElem.textContent = "";
+            }
+        }
+        // Initialize seats
+        const seatsContainer = document.getElementById("seats");
+        var j=1;
+        var k=65;
+        var alpha=String.fromCharCode(k);
+        var stid = document.getElementById("startTimeId").value;
+        console.log("stid = ",stid);
+        for (let i = 1; i <= numSeats; i++) {
+            const seat = document.createElement("div");
+            seat.id = `seat${i}`;
+            const target = alpha+j;
+            const index = reserved.findIndex(item => item.seatNumber === target);
+            console.log(index);
+            if (index !== -1) {
+                if(reserved[index].startTimeId==stid){
+                    console.log("되는데?");
+                    console.log("배열 starttime = ",reserved[index].startTimeId);
+                    seat.classList.add("reserved");
+                }
+                else{
+                    console.log("왜 안되는데?");
+                    console.log("배열 starttime = ",reserved[index].startTimeId);
+                    seat.classList.add("seat");
+                }
+            }
+            else{
+                seat.classList.add("seat");
+            }
+            seat.innerText =alpha+j;
+            seat.setAttribute('value',alpha+j);
+            j++;
+            if(j>10){
+                j=1;
+                k++;
+                alpha=String.fromCharCode(k);
+            }
+            seat.addEventListener("click", () => toggleSeat(i));
+            const br = document.createElement("br");
+            seatsContainer.appendChild(seat);
+            if(i%10==0){
+                seatsContainer.appendChild(br);
+            }
+        }
+</script>
+<script>
+    // 댓글 생성 버튼 변수화
+    const Button = document.getElementById("submit-btn");
+    // 댓글 클릭 이벤트 감지
+    Button.addEventListener("click", function() {
+        // 새 댓글 객체 생성
+        var seat = document.getElementsByClassName("seat selected");
+        var selectedSeat=[];
+        var reserveSeat="";
+        var startTimeId = document.getElementById("startTimeId").value;
+        var reserveMember = document.getElementById("memberid").value;
+        for(var i=0; i<seat.length;i++){
+            selectedSeat.push({seatNumber : seat[i].textContent});
+            if(i != (seat.length-1)){
+                reserveSeat+=(seat[i].textContent + ", ");
+            }
+            else{
+                reserveSeat+=seat[i].textContent;
+            }
+        }
+        console.log(reserveSeat);
+        for(var j=0; j<selectedSeat.length;j++){
+            selectedSeat[j].startTimeId = startTimeId;
+            selectedSeat[j].reserveMember = reserveMember;
+        }
+        // 댓글 객체 출력
+        // fetch() - 비동기 통신을 위한 API
+        const reserve={
+            memberId : document.getElementById("memberid").value,
+            movieName : document.getElementById("moviename").value,
+            city : document.getElementById("city").value,
+            date : document.getElementById("date").value,
+            time : document.getElementById("time").value,
+            number : document.getElementById("number").value,
+            seatNumber : reserveSeat
+        };
+        fetch("/reserveSeat", {
+            method: "POST", // POST 요청
+            headers: { // 전송 본문의 데이터 타입(JSON) 정보
+            "Content-Type": "application/json"
+        },
+            body: JSON.stringify(selectedSeat) //selectedSeat 객체를 JSON 문자열로 변환해 전송
+        }).then(response => {
+            // HTTP 응답 코드에 따른 메시지 출력
+            const msg = (response.ok) ? "예매완료!" : "예매실패..!";
+            alert(msg);
+        });
+        fetch("/reserve", {
+            method: "POST", // POST 요청
+            headers: { // 전송 본문의 데이터 타입(JSON) 정보
+            "Content-Type": "application/json"
+        },
+            body: JSON.stringify(reserve) //selectedSeat 객체를 JSON 문자열로 변환해 전송
+        }).then(response => {
+            // HTTP 응답 코드에 따른 메시지 출력
+            const msg = (response.ok) ? "완료!" : "실패..!";
+            alert(msg);
+            window.location.href = '/movie';
+        });
+    });
+</script>
+{{>layouts/footer}}

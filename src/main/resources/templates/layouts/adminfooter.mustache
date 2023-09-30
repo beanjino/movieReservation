@@ -1,0 +1,24 @@
+</main>
+<script>
+    var navList = document.getElementById('menuList');
+    var listItems = navList.getElementsByTagName('li');
+
+    function handleMouseOver() {
+        this.classList.add('active');
+        ulElement = this.getElementsByTagName('ul');
+        ulElement[0].style.display = 'block';
+    }
+
+    function handleMouseOut() {
+        this.classList.remove('active');
+        ulElement = this.getElementsByTagName('ul');
+        ulElement[0].style.display = 'none';
+    }
+
+    for (var i = 0; i < listItems.length; i++) {
+        listItems[i].addEventListener('mouseover', handleMouseOver);
+        listItems[i].addEventListener('mouseout', handleMouseOut);
+}
+</script>
+</body>
+</html>

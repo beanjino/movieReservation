@@ -1,0 +1,16 @@
+{{>layouts/adminheader}}
+{{#movie}}
+    <form style="margin-top:40px; margin-left:40px;" action="/adminUpdateMovie" method="post">
+        <input type="hidden" name="id" value={{id}}>
+        <input type="text" name="name" value={{name}}>
+        <input type="text" name="runningtime" value={{runningtime}}>
+        <input type="text" name="price" value={{price}}>
+        <input type="text" name="genre" value={{genre}}>
+        <input type="text" name="director" value={{director}}>
+        <input type="text" name="actors" value={{actors}}>
+        <input type="text" readonly name="rating" value={{rating}}>
+        <input type="text" name="age" value={{age}}>
+        <button type="submit">영화변경</button>
+    </form>
+{{/movie}}
+{{>layouts/adminfooter}}

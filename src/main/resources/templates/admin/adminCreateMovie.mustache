@@ -1,0 +1,19 @@
+{{>layouts/adminheader}}
+<form style="margin-top:40px; margin-left:40px;" action="/adminCreateMovie" method="post">
+    <input type="text" name="name" placeholder="영화제목">
+    <input type="text" name="runningtime" placeholder="상영시간">
+    <input type="text" name="price" placeholder="가격">
+    <input type="text" name="genre" placeholder="장르">
+    <input type="text" name="director" placeholder="감독명">
+    <input type="text" name="actors" placeholder="출연배우">
+    <input type="text" name="rating" placeholder="평점">
+    <select name="age">
+        <option value="전체관람가">전체 관람가</option>
+        <option value="12세이상관람가">12세 이상 관람가</option>
+        <option value="15세이상관람가">15세 이상 관람가</option>
+        <option value="청소년 관람불가">청소년 관람불가</option>
+    </select>
+    <button type="submit">영화추가</button>
+</form>
+
+{{>layouts/adminfooter}}

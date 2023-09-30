@@ -1,0 +1,29 @@
+{{>layouts/header}}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">name</th>
+        <th scope="col">runningtime</th>
+        <th scope="col">genre</th>
+        <th scope="col">director</th>
+        <th scope="col">actors</th>
+        <th scope="col">rating</th>
+        <th scope="col">age</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#movie}}
+        <tr>
+            <th >{{name}}</th>
+            <td >{{runningtime}}</td>
+            <td>{{genre}}</td>
+            <td>{{director}}</td>
+            <td>{{actors}}</td>
+            <td>{{rating}}</td>
+            <td>{{age}}</td>
+        </tr>
+    {{/movie}}
+    </tbody>
+</table>
+{{>comments/_comments}}
+{{>layouts/footer}}
